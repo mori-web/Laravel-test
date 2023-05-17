@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,5 +32,14 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+
+/*------------------------------------------------------------
+オリジナル
+------------------------------------------------------------*/
 #/testというURLがルートに送られてきたら、TestControllerのtestファンクションを実行する。このRoute処理を-name('test')で「test」という名前を名付ける
 Route::get('/test', [TestController::class, 'test'])->name('test');
+
+#/post/createというURLがルートに送られてきたら、PostControllerのcreateファンクションを実行する。このRoute処理を-name('test')で「test」という名前を名付ける
+Route::get('post/create', [PostController::class, 'create']);
+
+Route::post('post', [PostController::class, 'store'])->name('post.store');
