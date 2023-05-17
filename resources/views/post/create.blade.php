@@ -20,14 +20,18 @@
       <div class="mt-8">
         <div class="w-full flex flex-col">
           <label for="title" class="font-semibold mt-4">件名</label>
-          <input type="text" name="title" class="w-auto py-2 border border-gray-300 rounded-md" id="title">
+          <x-input-error :messages="$errors->get('title')" class="mt-2"/>
+          <input type="text" name="title" class="w-auto py-2 border border-gray-300 rounded-md" id="title" value="{{ old('title') }}">
         </div>
       </div>
 
-      <div class="wfull flex flex-col">
+      <div class="w-full flex flex-col">
         <label for="body" class="font-semibold mt-4">本文</label>
+        <x-input-error :messages="$errors->get('body')" class="mt-2"/>
         <textarea name="body" class="w-auto py-2 border border-gray-300 rounded-md" id="body" cols="30"
-          rows="5"></textarea>
+          rows="5">
+        {{ old('body') }}
+        </textarea>
       </div>
 
       <x-primary-button class="mt-4">
