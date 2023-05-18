@@ -2,47 +2,87 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Post;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    #postディレクトリのcreate.blade.phpを表示するという指示
-    public function create(){
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $posts = Post::all();
+        return view('post.index', compact('posts'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
       return view('post.create');
     }
 
-    //送信されたデータをPostモデルを使用してDBに保存する
-    public function store(Request $request) {
-      
-      Gate::authorize('test');
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+      $validated = $request->validate([
+        'title' => 'required|max:20',
+        'body' => 'required|max:400',
+      ]);
 
+      $validated['user_id'] = auth()->id();
+
+      $post = Post::create($validated);
+      $request->session()->flash('message', '保存しました');
+      return redirect()->route('post.index');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Post $post)
+    {
+      return view('post.show', compact('post'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Post $post)
+    {
+      return view('post.edit', compact('post'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Post $post)
+    {
       $validated = $request->validate([
         'title' => 'required|max:20',
         'body' => 'required|max:400',
       ]);
 
       // 投稿時にユーザーのidを、user_idに追加する
-      //auth()->id();はログイン中のユーザーのidのこと。
+      
       $validated['user_id'] = auth()->id();
+      $post->update($validated);
+      $request->session()->flash('message', '更新しました');
 
-      $post = Post::create($validated);
-      return back()->with('message', '保存しました');
+      return redirect()->route('post.show', compact('post'));
     }
 
-    public function index() {
-      //postsテーブルデータの全てを取得
-      $posts = Post::all();
-
-      // $posts = Post::where('user_id',1)->whereDate('created_at','<=', '2024-12-02')->get();
-
-      // $posts = Post::find(14);
-
-      // compact関数は変数をviewに与えるもの
-      return view('post.index', compact('posts'));
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Request $request, Post $post)
+    {
+      $post->delete();
+      $request->session()->flash('message', '削除しました');
+      return redirect()->route('post.index');
     }
-
-    
-
 }
