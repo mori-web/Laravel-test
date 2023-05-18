@@ -37,9 +37,14 @@ require __DIR__.'/auth.php';
 オリジナル
 ------------------------------------------------------------*/
 #/testというURLがルートに送られてきたら、TestControllerのtestファンクションを実行する。このRoute処理を-name('test')で「test」という名前を名付ける
+// テストページへのルート
 Route::get('/test', [TestController::class, 'test'])->name('test');
 
-#/post/createというURLがルートに送られてきたら、PostControllerのcreateファンクションを実行する。このRoute処理を-name('test')で「test」という名前を名付ける
+// フォームページへのアクセスルート
 Route::get('post/create', [PostController::class, 'create']);
 
+// 投稿データの作成ルート
 Route::post('post', [PostController::class, 'store'])->name('post.store');
+
+// 一覧画面のルート
+Route::get('post', [PostController::class, 'index']);

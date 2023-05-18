@@ -7,22 +7,38 @@ use App\Models\Post;
 
 class PostController extends Controller
 {
+    #postディレクトリのcreate.blade.phpを表示するという指示
     public function create(){
-      #postディレクトリのcreate.blade.phpを表示するという指示
       return view('post.create');
     }
 
     //送信されたデータをPostモデルを使用してDBに保存する
     public function store(Request $request) {
-
       $validated = $request->validate([
         'title' => 'required|max:20',
         'body' => 'required|max:400',
       ]);
 
-      $post = Post::create($validated);
+      // 投稿時にユーザーのidを、user_idに追加する
+      //auth()->id();はログイン中のユーザーのidのこと。
+      $validated['user_id'] = auth()->id();
 
+      $post = Post::create($validated);
       return back()->with('message', '保存しました');
     }
+
+    public function index() {
+      //postsテーブルデータの全てを取得
+      $posts = Post::all();
+
+      // $posts = Post::where('user_id',1)->whereDate('created_at','<=', '2024-12-02')->get();
+
+      // $posts = Post::find(14);
+
+      // compact関数は変数をviewに与えるもの
+      return view('post.index', compact('posts'));
+    }
+
+    
 
 }
