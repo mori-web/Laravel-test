@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -21,6 +22,13 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+      // testというGateの名前を名付けている
+        Gate::define('test', function(User $user) {
+          //$userにはログインユーザーの情報が入ってくる
+          if($user->id === 1) {
+            return true;
+          }
+          return false;
+        });
     }
 }

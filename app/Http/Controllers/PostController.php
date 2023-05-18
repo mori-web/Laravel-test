@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -14,6 +15,9 @@ class PostController extends Controller
 
     //送信されたデータをPostモデルを使用してDBに保存する
     public function store(Request $request) {
+      
+      Gate::authorize('test');
+
       $validated = $request->validate([
         'title' => 'required|max:20',
         'body' => 'required|max:400',

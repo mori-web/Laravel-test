@@ -41,10 +41,18 @@ require __DIR__.'/auth.php';
 Route::get('/test', [TestController::class, 'test'])->name('test');
 
 // フォームページへのアクセスルート
-Route::get('post/create', [PostController::class, 'create']);
+// Route::get('post/create', [PostController::class, 'create'])->middleware(['auth','admin']);
 
 // 投稿データの作成ルート
 Route::post('post', [PostController::class, 'store'])->name('post.store');
 
+// Route::middleware(['auth','admin'])->group(function(){
+  Route::get('post', [PostController::class, 'index']);
+  Route::get('post/create', [PostController::class, 'create']);
+// });
+
 // 一覧画面のルート
-Route::get('post', [PostController::class, 'index']);
+// Route::get('post', [PostController::class, 'index']);
+
+
+
