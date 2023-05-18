@@ -18,5 +18,7 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        \App\Models\Post::factory(25)->create(); //3個のダミーデータを作成する指定
     }
 }
