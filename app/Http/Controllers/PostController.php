@@ -34,11 +34,9 @@ class PostController extends Controller
         'title' => 'required|max:20',
         'body' => 'required|max:400',
       ]);
-
       $validated['user_id'] = auth()->id();
-
       $post = Post::create($validated);
-      $request->session()->flash('message', '保存しました');
+      $request->session()->flash('message', '投稿しました');
       return redirect()->route('post.index');
     }
 
